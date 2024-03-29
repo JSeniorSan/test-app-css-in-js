@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import Header from "../widgets/header/header";
-import P from "../shared/p/p";
 import Search from "../features/search/search";
-import Card from "../widgets/cards/_ui/card";
 import CardList from "../widgets/cards/pub/card-list";
+import Head from "../shared/card-title/h2";
 
 const AppWrapper = styled.div`
   min-height: 100vh;
@@ -19,10 +18,10 @@ function App() {
   return (
     <AppWrapper>
       <Header>Блог</Header>
-      <P>
+      <Head $size={24} $weight={400}>
         Здесь мы делимся интересными кейсами из наших проектов, пишем про IT, а
         также переводим зарубежные статьи
-      </P>
+      </Head>
       <Search />
       <CardList />
     </AppWrapper>

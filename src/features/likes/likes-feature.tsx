@@ -1,18 +1,12 @@
 import LikeBlock from "./_ui/like-block";
-import DislikeBlock from "./_ui/dislike-block";
 import Flex from "../../shared/flex";
+import { LikesCountInterface } from "../../widgets/cards/model/types";
 
-const LikesFeature = ({
-  likes,
-  dislikes,
-}: {
-  likes: number;
-  dislikes: number;
-}) => {
+const LikesFeature = ({ likeCount }: { likeCount: LikesCountInterface }) => {
   return (
-    <Flex gap="10px" align="baseline">
-      <LikeBlock count={likes} />
-      <DislikeBlock count={dislikes} />
+    <Flex gap="10px" align="center" height="32px">
+      <LikeBlock typeLike count={likeCount.likeCount} />
+      <LikeBlock count={likeCount.dislikeCount} />
     </Flex>
   );
 };

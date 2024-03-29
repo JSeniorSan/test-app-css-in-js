@@ -34,8 +34,6 @@ const CardList = () => {
       {posts.map((post, i) => {
         return (
           <Card
-            countDislikes={Math.round(Math.random() * 50)}
-            countLikes={Math.round(Math.random() * 50)}
             image={
               i === 0
                 ? "https://placehold.co/1358x435/png"
@@ -44,6 +42,7 @@ const CardList = () => {
             text={post.body}
             title={post.title}
             type={i === 0 ? true : false}
+            id={post.id}
             key={post.id}
           />
         );

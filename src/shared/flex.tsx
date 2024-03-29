@@ -8,6 +8,9 @@ interface FlexProps
   align?: "center" | "start" | "end" | "baseline";
   gap?: string;
   width?: "full" | string;
+  transform?: string;
+  height?: string;
+  padding?: string;
 }
 
 const StyledFlex = styled.div<FlexProps>`
@@ -17,6 +20,9 @@ const StyledFlex = styled.div<FlexProps>`
   align-items: ${(props) => props.align || "start"};
   gap: ${(props) => props.gap || "0px"};
   width: ${(props) => (props.width && "100%") || "fit-content"};
+  transform: translateY(${(props) => props.transform || "0px"});
+  height: ${(props) => props.height};
+  padding: ${(props) => props.padding};
 `;
 const Flex = (props: FlexProps) => {
   return <StyledFlex {...props}>{props.children}</StyledFlex>;
