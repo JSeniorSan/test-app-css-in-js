@@ -36,11 +36,15 @@ export interface MainPageLikeInterface {
   count: number;
   typeFeature: "onMainPage";
   setLikesCount: fnPropsStateType;
+  isLikeClick?: boolean;
+  isDislikeClick?: boolean;
 }
 export interface StoreLikeInterface {
   typeLike?: boolean;
   count: number;
   typeFeature: "inStore";
+  isLikeClick?: boolean;
+  isDislikeClick?: boolean;
 }
 
 export type switchLikeType = MainPageLikeInterface | StoreLikeInterface;
