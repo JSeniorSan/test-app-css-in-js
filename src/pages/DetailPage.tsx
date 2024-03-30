@@ -4,11 +4,14 @@ import Flex from "../shared/flex";
 import DetailPageTop from "../widgets/detail-page-content/pub/detail-page-top";
 import { useEffect, useState } from "react";
 import { PostsData } from "../widgets/cards/model/types";
+import { useAppSelector } from "../entities/store/hooks";
+import { selectPic } from "../widgets/detail-page-content/model/selectors";
 
 const DetailPage = () => {
   const [currentPost, setCurrentPost] = useState<PostsData>();
   const { pathname } = useLocation();
   const postId = pathname.split("/")[1];
+  const pic = useAppSelector(selectPic);
 
   useEffect(() => {
     const getPost = async () => {
@@ -27,21 +30,18 @@ const DetailPage = () => {
       width="full"
       height="100%"
       justify="center"
-      align="start"
+      align="center"
       padding="64px 130px">
       <DetailPageTop />
-      <Head $size={40} $weight={700}>
+      <Head $size={40} $weight={700} style={{ alignSelf: "center" }}>
         {currentPost?.title}
       </Head>
-      <img
-        src="https://placehold.co/848x477"
-        alt="pic"
-        width={848}
-        height={477}
-      />
-      <Head $size={18} $weight={400}>
-        {currentPost?.body}
-      </Head>
+      <Flex direction="column" align="center" padding="0px 146px" gap="48px">
+        <img src={pic} alt="pic" width={848} height={477} />
+        <Head $size={18} $weight={400} $width={848}>
+          {currentPost?.body}
+        </Head>
+      </Flex>
     </Flex>
   );
 };

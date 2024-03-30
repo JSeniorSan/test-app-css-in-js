@@ -1,23 +1,26 @@
 import BackHomeFeature from "../_ui/back-home-feature";
 import LikesFeature from "../../../features/likes/likes-feature";
 import Flex from "../../../shared/flex";
-import { useAppSelector } from "../../../entities/store/hooks";
-import {
-  selectDislikesCount,
-  selectLikesCount,
-} from "../../../features/likes/model/selectors";
+import useDetailData from "../model/hooks";
 
 const DetailPageTop = () => {
-  const likes = useAppSelector(selectLikesCount);
-  const dislikes = useAppSelector(selectDislikesCount);
+  const { dislikes, dislikeIsClicked, likeIsClicked, likes } = useDetailData();
+
   return (
     <Flex justify="space-between" width="full">
       <BackHomeFeature />
       <LikesFeature
-        likeCount={{
-          dislikeCount: dislikes,
-          likeCount: likes,
+        likes={{
+          dislike: {
+            count: dislikes,
+            isClicked: dislikeIsClicked,
+          },
+          like: {
+            count: likes,
+            isClicked: likeIsClicked,
+          },
         }}
+        typeFeature="inStore"
       />
     </Flex>
   );

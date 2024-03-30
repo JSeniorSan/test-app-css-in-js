@@ -1,13 +1,40 @@
 import LikeBlock from "./_ui/like-block";
 import Flex from "../../shared/flex";
-import { LikesCountInterface } from "../../widgets/cards/model/types";
+import { LikesProps } from "./model/types";
 
-const LikesFeature = ({ likeCount }: { likeCount: LikesCountInterface }) => {
+const LikesFeature = (props: LikesProps) => {
   return (
-    <Flex gap="10px" align="center" height="32px">
-      <LikeBlock typeLike count={likeCount.likeCount} />
-      <LikeBlock count={likeCount.dislikeCount} />
-    </Flex>
+    <>
+      {props.typeFeature === "inStore" && (
+        <Flex gap="10px" align="center" height="32px">
+          <LikeBlock
+            typeLike
+            count={props.likes.like.count}
+            typeFeature={props.typeFeature}
+          />
+          <LikeBlock
+            count={props.likes.dislike.count}
+            typeFeature={props.typeFeature}
+          />
+        </Flex>
+      )}
+
+      {props.typeFeature === "onMainPage" && (
+        <Flex gap="10px" align="center" height="32px">
+          <LikeBlock
+            typeLike
+            count={props.likes.like.count}
+            typeFeature={props.typeFeature}
+            setLikesCount={props.setLikes}
+          />
+          <LikeBlock
+            count={props.likes.dislike.count}
+            typeFeature={props.typeFeature}
+            setLikesCount={props.setLikes}
+          />
+        </Flex>
+      )}
+    </>
   );
 };
 

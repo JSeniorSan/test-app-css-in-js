@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../_ui/card";
 import { PostsData } from "../model/types";
@@ -10,25 +9,7 @@ const CardListLayout = styled.section`
   gap: 1rem;
 `;
 
-const CardList = () => {
-  const [posts, setPosts] = useState<PostsData[]>([]);
-  //   обработать ошибки
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res1 = await fetch("https://jsonplaceholder.typicode.com/posts");
-        const data1: PostsData[] = await res1.json();
-        setPosts(data1);
-      } catch (err) {
-        if (err instanceof Error) {
-          console.log(err.message);
-        }
-      }
-    };
-    fetchData();
-  }, []);
-
+const CardList = ({ posts }: { posts: PostsData[] }) => {
   return (
     <CardListLayout>
       {posts.map((post, i) => {

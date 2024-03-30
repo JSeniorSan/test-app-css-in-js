@@ -1,13 +1,15 @@
 import styled, { css } from "styled-components";
 import LikesFeature from "../../../features/likes/likes-feature";
 import Flex from "../../../shared/flex";
-import { CardProps, LikesCountInterface } from "../model/types";
+import { CardProps } from "../model/types";
 import Button from "../../../shared/button/button";
 import Head from "../../../shared/card-title/h2";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../../entities/store/hooks";
 import { useEffect, useState } from "react";
 import { reset, setCounts } from "../../../features/likes/model/likes-slice";
+import { CounterState } from "../../../features/likes/model/types";
+import { setPic } from "../../detail-page-content/model/detail-page-slice";
 
 const CardWrapper = styled(Flex)<{ $large?: boolean }>`
   height: fit-content;
@@ -24,20 +26,32 @@ const CardWrapper = styled(Flex)<{ $large?: boolean }>`
 `;
 
 const Card = ({ image, title, text, type, id }: CardProps) => {
-  const [likesCount, setLikesCount] = useState<LikesCountInterface>({
-    dislikeCount: 0,
-    likeCount: 0,
-  });
   const dispatch = useAppDispatch();
+  const [likes, setLikes] = useState<CounterState>({
+    dislike: {
+      count: 0,
+      isClicked: false,
+    },
+    like: {
+      count: 0,
+      isClicked: false,
+    },
+  });
 
   function randomNumber() {
     return Math.round(Math.random() * 50);
   }
 
   useEffect(() => {
-    setLikesCount({
-      dislikeCount: randomNumber(),
-      likeCount: randomNumber(),
+    setLikes({
+      dislike: {
+        count: randomNumber(),
+        isClicked: false,
+      },
+      like: {
+        count: randomNumber(),
+        isClicked: false,
+      },
     });
   }, []);
 
@@ -49,7 +63,13 @@ const Card = ({ image, title, text, type, id }: CardProps) => {
           <Head $size={28} $weight={700}>
             {title}
           </Head>
-          {type && <LikesFeature likeCount={likesCount} />}
+          {type && (
+            <LikesFeature
+              likes={likes}
+              setLikes={setLikes}
+              typeFeature="onMainPage"
+            />
+          )}
         </Flex>
         {type && (
           <Head $size={24} $weight={400}>
@@ -59,13 +79,18 @@ const Card = ({ image, title, text, type, id }: CardProps) => {
       </Flex>
       {!type && (
         <Flex justify="space-between" width="full" align="center">
-          <LikesFeature likeCount={likesCount} />
+          <LikesFeature
+            likes={likes}
+            setLikes={setLikes}
+            typeFeature="onMainPage"
+          />
           <Link to={`/${id}`} style={{ alignSelf: "end", cursor: "pointer" }}>
             <Button
               type="link"
               onClick={() => {
                 dispatch(reset());
-                dispatch(setCounts(likesCount));
+                dispatch(setCounts(likes));
+                dispatch(setPic({ pic: image }));
               }}>
               Читать дальше
             </Button>
@@ -73,12 +98,18 @@ const Card = ({ image, title, text, type, id }: CardProps) => {
         </Flex>
       )}
       {type && (
-        <Link to={`/${id}`}>
+        <Link
+          to={`/${id}`}
+          style={{
+            alignSelf: "end",
+            cursor: "pointer",
+          }}>
           <Button
             type="link"
             onClick={() => {
               dispatch(reset());
-              dispatch(setCounts(likesCount));
+              dispatch(setCounts(likes));
+              dispatch(setPic({ pic: image }));
             }}>
             Читать дальше
           </Button>

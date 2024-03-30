@@ -1,14 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-interface CounterState {
-  dislikeCount: number;
-  likeCount: number;
-}
+import { CounterState } from "./types";
+import { dislikeStoreStateCount, likeStoreStateCount } from "./helpers";
 
 const initialState: CounterState = {
-  dislikeCount: 0,
-  likeCount: 0,
+  dislike: {
+    count: 0,
+    isClicked: false,
+  },
+  like: {
+    count: 0,
+    isClicked: false,
+  },
 };
 
 export const counterSlice = createSlice({
@@ -16,16 +19,19 @@ export const counterSlice = createSlice({
   initialState,
   reducers: {
     incrementLike: (state) => {
-      state.likeCount += 1;
+      likeStoreStateCount(state);
     },
     incrementDislike: (state) => {
-      state.dislikeCount += 1;
+      dislikeStoreStateCount(state);
     },
 
     setCounts: (state, action: PayloadAction<CounterState>) => {
-      state.dislikeCount += action.payload.dislikeCount;
-      state.likeCount += action.payload.likeCount;
+      state.dislike.count += action.payload.dislike.count;
+      state.like.count += action.payload.like.count;
+      state.dislike.isClicked = action.payload.dislike.isClicked;
+      state.like.isClicked = action.payload.like.isClicked;
     },
+
     reset: () => initialState,
   },
 });

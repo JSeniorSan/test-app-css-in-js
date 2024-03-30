@@ -12,8 +12,3 @@ export interface PostsData {
   title: string;
   body: string;
 }
-
-export interface LikesCountInterface {
-  dislikeCount: number;
-  likeCount: number;
-}

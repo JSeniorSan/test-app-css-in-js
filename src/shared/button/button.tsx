@@ -19,6 +19,7 @@ const StyledButton = styled.button<buttonInterface>`
       font-size: 16px;
       font-weight: 400;
       align-self: end;
+      cursor: pointer;
     `}
   ${(props) =>
     props.type === "transparent" &&
@@ -27,6 +28,7 @@ const StyledButton = styled.button<buttonInterface>`
       border: none;
       font-size: 16px;
       font-weight: 400;
+      cursor: pointer;
     `}
 `;
 
