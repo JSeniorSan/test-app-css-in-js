@@ -26,11 +26,13 @@ const LikesFeature = (props: LikesProps) => {
             count={props.likes.like.count}
             typeFeature={props.typeFeature}
             setLikesCount={props.setLikes}
+            isLikeClick={props.likes.like.isClicked}
           />
           <LikeBlock
             count={props.likes.dislike.count}
             typeFeature={props.typeFeature}
             setLikesCount={props.setLikes}
+            isDislikeClick={props.likes.dislike.isClicked}
           />
         </Flex>
       )}

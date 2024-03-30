@@ -6,16 +6,13 @@ import Button from "../../../shared/button/button";
 import { useAppDispatch, useAppSelector } from "../../../entities/store/hooks";
 import { incrementDislike, incrementLike } from "../model/likes-slice";
 import { switchLikeType } from "../model/types";
-import { useState } from "react";
 import {
   selectDislikeIsClicked,
   selectLikeIsClicked,
 } from "../model/selectors";
 
 const LikeBlock = (props: switchLikeType) => {
-  const [dislikeIsClicked, setDislikeIsClicked] = useState<boolean>(false);
-  const [likeIsClicked, setLikeIsClicked] = useState<boolean>(false);
-  const { count, typeFeature, typeLike } = props;
+  const { count, typeFeature, typeLike, isDislikeClick, isLikeClick } = props;
   const dispatch = useAppDispatch();
   const storeLikeIsClicked = useAppSelector(selectLikeIsClicked);
   const storeDislikeIsClicked = useAppSelector(selectDislikeIsClicked);
@@ -31,8 +28,6 @@ const LikeBlock = (props: switchLikeType) => {
       props.setLikesCount((prev) => {
         if (prev.like.isClicked) return prev;
         if (prev.dislike.isClicked) {
-          setLikeIsClicked(true);
-          setDislikeIsClicked(false);
           return {
             dislike: {
               count: prev.dislike.count - 1,
@@ -44,7 +39,6 @@ const LikeBlock = (props: switchLikeType) => {
             },
           };
         } else {
-          setLikeIsClicked(true);
           return {
             dislike: {
               count: prev.dislike.count,
@@ -67,8 +61,6 @@ const LikeBlock = (props: switchLikeType) => {
       props.setLikesCount((prev) => {
         if (prev.dislike.isClicked) return prev;
         if (prev.like.isClicked) {
-          setLikeIsClicked(false);
-          setDislikeIsClicked(true);
           return {
             dislike: {
               count: prev.dislike.count + 1,
@@ -80,7 +72,6 @@ const LikeBlock = (props: switchLikeType) => {
             },
           };
         } else {
-          setDislikeIsClicked(true);
           return {
             dislike: {
               count: prev.dislike.count + 1,
@@ -103,7 +94,7 @@ const LikeBlock = (props: switchLikeType) => {
       {typeLike ? (
         <Button onClick={handleLikeClick} type="transparent">
           <LikeSvgComponent
-            colorsvg={likeIsClicked || storeLikeIsClicked ? "green" : "gray"}
+            colorsvg={isLikeClick || storeLikeIsClicked ? "green" : "gray"}
             style={{
               cursor: "pointer",
             }}
@@ -115,9 +106,7 @@ const LikeBlock = (props: switchLikeType) => {
             style={{
               cursor: "pointer",
             }}
-            colorsvg={
-              dislikeIsClicked || storeDislikeIsClicked ? "red" : "gray"
-            }
+            colorsvg={isDislikeClick || storeDislikeIsClicked ? "red" : "gray"}
           />
         </Button>
       )}
