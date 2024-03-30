@@ -1,14 +1,19 @@
 import styled, { css } from "styled-components";
 import LikesFeature from "../../../features/likes/likes-feature";
-import H2 from "../../../shared/card-title/h2";
-import P from "../../../shared/p/p";
 import Flex from "../../../shared/flex";
 import { CardProps } from "../model/types";
+import Button from "../../../shared/button/button";
+import Head from "../../../shared/card-title/h2";
+import { Link } from "react-router-dom";
+import { useAppDispatch } from "../../../entities/store/hooks";
+import { useEffect, useState } from "react";
+import { reset, setCounts } from "../../../features/likes/model/likes-slice";
+import { CounterState } from "../../../features/likes/model/types";
+import { setPic } from "../../detail-page-content/model/detail-page-slice";
 
 const CardWrapper = styled(Flex)<{ $large?: boolean }>`
   height: fit-content;
-  min-width: fit-content;
-  max-width: 100%;
+  width: 100%;
   border: 1px solid #f4f4f4;
   border-radius: 12px;
   box-shadow: 10px 10px 10px #00000018;
@@ -20,40 +25,96 @@ const CardWrapper = styled(Flex)<{ $large?: boolean }>`
     `}
 `;
 
-const Link = styled.button`
-  padding: 14px 24px 12px 24px;
-  border: 2px solid black;
-  border-radius: 60px;
-  font-size: 16px;
-  font-weight: 400;
-  align-self: end;
-`;
+const Card = ({ image, title, text, type, id }: CardProps) => {
+  const dispatch = useAppDispatch();
+  const [likes, setLikes] = useState<CounterState>({
+    dislike: {
+      count: 0,
+      isClicked: false,
+    },
+    like: {
+      count: 0,
+      isClicked: false,
+    },
+  });
 
-const Card = ({
-  image,
-  title,
-  text,
-  countLikes,
-  countDislikes,
-  type,
-}: CardProps) => {
+  function randomNumber() {
+    return Math.round(Math.random() * 50);
+  }
+
+  useEffect(() => {
+    setLikes({
+      dislike: {
+        count: randomNumber(),
+        isClicked: false,
+      },
+      like: {
+        count: randomNumber(),
+        isClicked: false,
+      },
+    });
+  }, []);
+
   return (
-    <CardWrapper $large={type} direction="column" gap="24px">
+    <CardWrapper $large={type} direction="column" gap="24px" width="full">
       <img src={image} alt="content" width="100%" height="50%" />
       <Flex direction="column" gap="32px">
         <Flex justify="space-between" width="full">
-          <H2>{title}</H2>
-          {type && <LikesFeature likes={countLikes} dislikes={countDislikes} />}
+          <Head $size={28} $weight={700}>
+            {title}
+          </Head>
+          {type && (
+            <LikesFeature
+              likes={likes}
+              setLikes={setLikes}
+              typeFeature="onMainPage"
+            />
+          )}
         </Flex>
-        {type && <P>{text}</P>}
+        {type && (
+          <Head $size={24} $weight={400}>
+            {text}
+          </Head>
+        )}
       </Flex>
       {!type && (
         <Flex justify="space-between" width="full" align="center">
-          <LikesFeature likes={countLikes} dislikes={countDislikes} />
-          <Link>Читать дальше</Link>
+          <LikesFeature
+            likes={likes}
+            setLikes={setLikes}
+            typeFeature="onMainPage"
+          />
+          <Link to={`/${id}`} style={{ alignSelf: "end", cursor: "pointer" }}>
+            <Button
+              type="link"
+              onClick={() => {
+                dispatch(reset());
+                dispatch(setCounts(likes));
+                dispatch(setPic({ pic: image }));
+              }}>
+              Читать дальше
+            </Button>
+          </Link>
         </Flex>
       )}
-      {type && <Link>Читать дальше</Link>}
+      {type && (
+        <Link
+          to={`/${id}`}
+          style={{
+            alignSelf: "end",
+            cursor: "pointer",
+          }}>
+          <Button
+            type="link"
+            onClick={() => {
+              dispatch(reset());
+              dispatch(setCounts(likes));
+              dispatch(setPic({ pic: image }));
+            }}>
+            Читать дальше
+          </Button>
+        </Link>
+      )}
     </CardWrapper>
   );
 };

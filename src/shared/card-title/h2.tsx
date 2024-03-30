@@ -1,11 +1,22 @@
 import styled from "styled-components";
 
-const Title = styled.h2`
-  font-size: 28px;
-  font-weight: 700;
+interface h2Interface
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLHeadingElement>,
+    HTMLHeadingElement
+  > {
+  $size: number;
+  $weight: number;
+  $width?: number;
+}
+
+const Title = styled.h2<h2Interface>`
+  font-size: ${(props) => props.$size + "px"};
+  font-weight: ${(props) => props.$weight};
+  width: ${(props) => props.$width + "px"};
 `;
-const H2 = ({ children }: { children: string }) => {
-  return <Title>{children}</Title>;
+const Head = (props: h2Interface) => {
+  return <Title {...props}>{props.children}</Title>;
 };
 
-export default H2;
+export default Head;

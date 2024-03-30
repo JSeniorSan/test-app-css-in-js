@@ -1,19 +1,40 @@
 import LikeBlock from "./_ui/like-block";
-import DislikeBlock from "./_ui/dislike-block";
 import Flex from "../../shared/flex";
+import { LikesProps } from "./model/types";
 
-const LikesFeature = ({
-  likes,
-  dislikes,
-}: {
-  likes: number;
-  dislikes: number;
-}) => {
+const LikesFeature = (props: LikesProps) => {
   return (
-    <Flex gap="10px" align="baseline">
-      <LikeBlock count={likes} />
-      <DislikeBlock count={dislikes} />
-    </Flex>
+    <>
+      {props.typeFeature === "inStore" && (
+        <Flex gap="10px" align="center" height="32px">
+          <LikeBlock
+            typeLike
+            count={props.likes.like.count}
+            typeFeature={props.typeFeature}
+          />
+          <LikeBlock
+            count={props.likes.dislike.count}
+            typeFeature={props.typeFeature}
+          />
+        </Flex>
+      )}
+
+      {props.typeFeature === "onMainPage" && (
+        <Flex gap="10px" align="center" height="32px">
+          <LikeBlock
+            typeLike
+            count={props.likes.like.count}
+            typeFeature={props.typeFeature}
+            setLikesCount={props.setLikes}
+          />
+          <LikeBlock
+            count={props.likes.dislike.count}
+            typeFeature={props.typeFeature}
+            setLikesCount={props.setLikes}
+          />
+        </Flex>
+      )}
+    </>
   );
 };
 

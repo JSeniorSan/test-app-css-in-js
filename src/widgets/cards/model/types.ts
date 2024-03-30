@@ -2,9 +2,8 @@ export interface CardProps {
   image: string;
   title: string;
   text: string;
-  countLikes: number;
-  countDislikes: number;
   type: boolean;
+  id: number;
 }
 
 export interface PostsData {

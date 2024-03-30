@@ -1,16 +1,127 @@
-import styled from "styled-components";
-import LikeSvgComponent from "./like-svg-component";
 import Flex from "../../../shared/flex";
-const Count = styled.span`
-  font-size: 16px;
-  font-weight: 400;
-`;
+import LikeSvgComponent from "./like-svg-component";
+import DislikeSvgComponent from "./dislike-svg-component";
+import CountElement from "./count-element";
+import Button from "../../../shared/button/button";
+import { useAppDispatch, useAppSelector } from "../../../entities/store/hooks";
+import { incrementDislike, incrementLike } from "../model/likes-slice";
+import { switchLikeType } from "../model/types";
+import { useState } from "react";
+import {
+  selectDislikeIsClicked,
+  selectLikeIsClicked,
+} from "../model/selectors";
 
-const LikeBlock = ({ count }: { count: number }) => {
+const LikeBlock = (props: switchLikeType) => {
+  const [dislikeIsClicked, setDislikeIsClicked] = useState<boolean>(false);
+  const [likeIsClicked, setLikeIsClicked] = useState<boolean>(false);
+  const { count, typeFeature, typeLike } = props;
+  const dispatch = useAppDispatch();
+  const storeLikeIsClicked = useAppSelector(selectLikeIsClicked);
+  const storeDislikeIsClicked = useAppSelector(selectDislikeIsClicked);
+
+  function dispatchInStore(type: "increment" | "decrement") {
+    type === "increment"
+      ? dispatch(incrementLike())
+      : dispatch(incrementDislike());
+  }
+
+  const handleLikeClick = () => {
+    if (typeFeature === "onMainPage") {
+      props.setLikesCount((prev) => {
+        if (prev.like.isClicked) return prev;
+        if (prev.dislike.isClicked) {
+          setLikeIsClicked(true);
+          setDislikeIsClicked(false);
+          return {
+            dislike: {
+              count: prev.dislike.count - 1,
+              isClicked: false,
+            },
+            like: {
+              count: prev.like.count + 1,
+              isClicked: true,
+            },
+          };
+        } else {
+          setLikeIsClicked(true);
+          return {
+            dislike: {
+              count: prev.dislike.count,
+              isClicked: false,
+            },
+            like: {
+              count: prev.like.count + 1,
+              isClicked: true,
+            },
+          };
+        }
+      });
+    } else {
+      dispatchInStore("increment");
+    }
+  };
+
+  const handleDislikeClick = () => {
+    if (typeFeature === "onMainPage") {
+      props.setLikesCount((prev) => {
+        if (prev.dislike.isClicked) return prev;
+        if (prev.like.isClicked) {
+          setLikeIsClicked(false);
+          setDislikeIsClicked(true);
+          return {
+            dislike: {
+              count: prev.dislike.count + 1,
+              isClicked: true,
+            },
+            like: {
+              count: prev.like.count - 1,
+              isClicked: false,
+            },
+          };
+        } else {
+          setDislikeIsClicked(true);
+          return {
+            dislike: {
+              count: prev.dislike.count + 1,
+              isClicked: false,
+            },
+            like: {
+              count: prev.like.count,
+              isClicked: false,
+            },
+          };
+        }
+      });
+    } else {
+      dispatchInStore("decrement");
+    }
+  };
+
   return (
     <Flex align="center" gap="5px">
-      <LikeSvgComponent />
-      <Count>{count}</Count>
+      {typeLike ? (
+        <Button onClick={handleLikeClick} type="transparent">
+          <LikeSvgComponent
+            colorsvg={likeIsClicked || storeLikeIsClicked ? "green" : "gray"}
+            style={{
+              cursor: "pointer",
+            }}
+          />
+        </Button>
+      ) : (
+        <Button onClick={handleDislikeClick} type="transparent">
+          <DislikeSvgComponent
+            style={{
+              cursor: "pointer",
+            }}
+            colorsvg={
+              dislikeIsClicked || storeDislikeIsClicked ? "red" : "gray"
+            }
+          />
+        </Button>
+      )}
+      <CountElement>{count}</CountElement>
     </Flex>
   );
 };

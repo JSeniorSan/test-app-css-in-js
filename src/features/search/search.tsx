@@ -13,11 +13,18 @@ const SearchComponent = styled.div`
   padding: 12px 14px;
 `;
 
-const Search = () => {
+const Search = ({
+  value,
+  setValue,
+}: {
+  setValue: (val: string) => void;
+  value: string;
+}) => {
+  console.log(value);
   return (
     <SearchComponent>
       <img src="/ic_search.png" alt="glass" width={24} height={24} />
-      <Input />
+      <Input onChange={(e) => setValue(e.currentTarget.value)} value={value} />
     </SearchComponent>
   );
 };
